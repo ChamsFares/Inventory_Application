@@ -1,14 +1,20 @@
+const path = require("node:path");
+require("dotenv").config();
 const express = require("express");
 const app = express();
-const path = require("path");
-const userRouter = require("./routes/router");
-require("dotenv").config();
+const categoryRouter = require("./routes/categoryRoutes");
+const itemRouter = require("./routes/itemRoutes");
 
-app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
 
-app.use("/", userRouter);
+const assetsPath = path.join(__dirname, "public");
+app.use(express.static(assetsPath));
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server running on ${process.env.PORT}`);
-});
+app.use(express.urlencoded({ extended: true }));
+
+app.use("/", categoryRouter);
+app.use("/category", itemRouter);
+
+PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Listening to port: ${PORT}`));
